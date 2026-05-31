@@ -63,3 +63,4 @@ playground.xcworkspace
 Secrets/
 Config.xcconfig
 .wrangler/
+client_*.googleusercontent.com.plist

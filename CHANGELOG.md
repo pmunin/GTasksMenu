@@ -8,6 +8,9 @@
 
 ## Unreleased
 
+### Added
+- Added a Menu Bar setting to show the first active task title from a chosen list next to the menu bar icon.
+
 ## v1.2.0 (2026-05-16)
 
 ### Added

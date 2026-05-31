@@ -91,7 +91,6 @@
 		6E4CD6808B2587AD2F8F9563 /* TaskItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemModelTests.swift; sourceTree = "<group>"; };
 		7270F80F12239828D873B133 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		77DBAAB7CC102C6006686981 /* MetricKitPayloadStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKitPayloadStoreTests.swift; sourceTree = "<group>"; };
-		7B9B96C944BC0E6F55E3D791 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		8C8C52C19BDA6F8F2D3C638F /* AppIcon.svg */ = {isa = PBXFileReference; path = AppIcon.svg; sourceTree = "<group>"; };
 		8F3614C7335BB0200D28F074 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		8FE1F31A1E2F87FD9042F1B4 /* GoogleTasksAPIBehaviorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleTasksAPIBehaviorTests.swift; sourceTree = "<group>"; };
@@ -104,6 +103,7 @@
 		B39705E088F29F844C149617 /* DueDateNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DueDateNotificationService.swift; sourceTree = "<group>"; };
 		BB4F099FA85A0476A96ED002 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		BB598B8D34C0A014D7826A63 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
+		BD583A508C749EAC05142C88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		BFE9F6BF8DFE197A82CE6A11 /* InMemoryKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryKeychainService.swift; sourceTree = "<group>"; };
 		C3377E75BA19027E464EAEB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C351DB97FAAF55B3B516EAD9 /* TasksAPIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksAPIProtocol.swift; sourceTree = "<group>"; };
@@ -118,15 +118,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		02C7954B6F0AE7D4B33301DC /* TaskMenu */ = {
-			isa = PBXGroup;
-			children = (
-				7B9B96C944BC0E6F55E3D791 /* Config.xcconfig */,
-			);
-			name = TaskMenu;
-			path = .;
-			sourceTree = "<group>";
-		};
 		141A484087CC4923B5F2371C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +202,15 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		BA2107144D01BC8296415B0D /* GTasksMenu */ = {
+			isa = PBXGroup;
+			children = (
+				BD583A508C749EAC05142C88 /* Config.xcconfig */,
+			);
+			name = GTasksMenu;
+			path = .;
+			sourceTree = "<group>";
+		};
 		C53DB1319E1111ADB350C841 /* TaskMenuTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,8 +240,8 @@
 		E7776CF5C61A2557700CB1FE = {
 			isa = PBXGroup;
 			children = (
+				BA2107144D01BC8296415B0D /* GTasksMenu */,
 				A34BA795C75683448AFABACA /* TaskMenu */,
-				02C7954B6F0AE7D4B33301DC /* TaskMenu */,
 				C53DB1319E1111ADB350C841 /* TaskMenuTests */,
 				1E011DB940E268BD3223C95C /* Products */,
 			);
@@ -295,11 +295,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
-					2499498786EF41DCFC6BE7F6 = {
-						DevelopmentTeam = V82M9YX8BR;
-					};
 					54F3465CB5E85F801680719A = {
-						DevelopmentTeam = V82M9YX8BR;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -428,7 +424,7 @@
 		};
 		6EF47391B5EF770AC931DC3F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B9B96C944BC0E6F55E3D791 /* Config.xcconfig */;
+			baseConfigurationReference = BD583A508C749EAC05142C88 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -516,7 +512,7 @@
 		};
 		A734F39AA9B691088E02AEFF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B9B96C944BC0E6F55E3D791 /* Config.xcconfig */;
+			baseConfigurationReference = BD583A508C749EAC05142C88 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

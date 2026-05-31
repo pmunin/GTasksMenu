@@ -7,17 +7,20 @@ final class StatusBarController: NSObject {
     private let popover: NSPopover
     private let contextMenu = NSMenu()
     private let menuPresentationRefreshTrigger: MenuPresentationRefreshTrigger
+    private let appState: AppState
     private var outsideClickMonitors: [Any] = []
 
     init(appState: AppState) {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         popover = NSPopover()
+        self.appState = appState
         menuPresentationRefreshTrigger = MenuPresentationRefreshTrigger(appState: appState)
         super.init()
 
         configureStatusItem()
         configurePopover(appState: appState)
         configureContextMenu()
+        observeMenuBarTitle()
     }
 
     private func configureStatusItem() {
@@ -28,10 +31,40 @@ final class StatusBarController: NSObject {
         image?.isTemplate = true
 
         button.image = image
+        button.imagePosition = .imageLeading
         button.toolTip = "TaskMenu"
         button.target = self
         button.action = #selector(statusItemClicked(_:))
         button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+    }
+
+    private func observeMenuBarTitle() {
+        updateStatusItemTitle(appState.menuBarTitle)
+        withObservationTracking {
+            _ = appState.menuBarTitle
+        } onChange: { [weak self] in
+            Task { @MainActor in
+                self?.observeMenuBarTitle()
+            }
+        }
+    }
+
+    private func updateStatusItemTitle(_ title: String?) {
+        guard let button = statusItem.button else { return }
+
+        let trimmed = title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let trimmed, !trimmed.isEmpty else {
+            button.title = ""
+            button.imagePosition = .imageOnly
+            return
+        }
+
+        let maxLength = 30
+        let truncated = trimmed.count > maxLength
+            ? String(trimmed.prefix(maxLength)).trimmingCharacters(in: .whitespaces) + "\u{2026}"
+            : trimmed
+        button.title = truncated
+        button.imagePosition = .imageLeading
     }
 
     private func configurePopover(appState: AppState) {

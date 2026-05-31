@@ -61,6 +61,21 @@ final class AppState {
             }
         }
     }
+    /// Task list whose first active task is shown in the menu bar. `nil` shows the icon only.
+    var menuBarTitleListId: String? {
+        didSet {
+            if let menuBarTitleListId {
+                userDefaults.set(menuBarTitleListId, forKey: Constants.UserDefaults.menuBarTitleListIdKey)
+            } else {
+                userDefaults.removeObject(forKey: Constants.UserDefaults.menuBarTitleListIdKey)
+            }
+            Task { [weak self] in
+                await self?.refreshMenuBarTitle()
+            }
+        }
+    }
+    /// Active tasks for the menu-bar list when it differs from the selected list.
+    private var menuBarListTasks: [TaskItem] = []
     var latestAvailableUpdate: AppUpdateRelease?
     var isCheckingForUpdates = false
     var updateCheckErrorMessage: String?
@@ -68,6 +83,16 @@ final class AppState {
 
     var selectedList: TaskList? {
         taskLists.first { $0.id == selectedListId }
+    }
+
+    /// Title of the first active task in the menu-bar list, or `nil` when unset/empty.
+    var menuBarTitle: String? {
+        guard isSignedIn, let listId = menuBarTitleListId else { return nil }
+        let source = (listId == selectedListId) ? tasks : menuBarListTasks
+        let roots = tasksSortedByGooglePosition(
+            source.filter { $0.parent == nil && !$0.isCompleted }
+        )
+        return roots.first?.title
     }
 
     var isShowingInitialTaskLoad: Bool {
@@ -262,6 +287,9 @@ final class AppState {
         self.lastUpdateCheckDate = userDefaults.object(
             forKey: Constants.UserDefaults.lastUpdateCheckDateKey
         ) as? Date
+        self.menuBarTitleListId = userDefaults.string(
+            forKey: Constants.UserDefaults.menuBarTitleListIdKey
+        )
         self.isSignedIn = authService.isSignedIn
         self.googleAccountProfile = authService.accountProfile
     }
@@ -331,6 +359,7 @@ final class AppState {
         taskCacheByListID = [:]
         completedTasksFetchedListIDs = []
         completedTasksCacheByListID = [:]
+        menuBarListTasks = []
         taskLoadRequestID += 1
         let dueDateNotificationService = dueDateNotificationService
         Task {
@@ -355,6 +384,7 @@ final class AppState {
                 selectedListId = first.id
             }
             await refreshTasks()
+            await refreshMenuBarTitle()
         } catch {
             handleError(error)
         }
@@ -367,6 +397,26 @@ final class AppState {
             await loadTaskLists()
         } else {
             await refreshTasks()
+        }
+        await refreshMenuBarTitle()
+    }
+
+    /// Fetches active tasks for the menu-bar list when it differs from the selected list,
+    /// so `menuBarTitle` reflects the current top task. When the menu-bar list matches the
+    /// selected list, `menuBarTitle` is derived from the already-loaded `tasks`.
+    func refreshMenuBarTitle() async {
+        guard isSignedIn, let listId = menuBarTitleListId, listId != selectedListId else {
+            menuBarListTasks = []
+            return
+        }
+        do {
+            menuBarListTasks = try await api.listTasks(
+                listId: listId,
+                showCompleted: false,
+                showHidden: false
+            )
+        } catch {
+            // Keep the previously shown title on a transient failure.
         }
     }
 

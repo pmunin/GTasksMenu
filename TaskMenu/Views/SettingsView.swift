@@ -22,6 +22,10 @@ struct SettingsView: View {
 
             Divider()
 
+            menuBarSection
+
+            Divider()
+
             accountSection
 
             Divider()
@@ -54,6 +58,7 @@ struct SettingsView: View {
         }
         .task {
             await appState.refreshGoogleAccountProfileIfNeeded()
+            await appState.bootstrapSignedInState()
         }
         .alert("Disconnect Google Account?", isPresented: $isConfirmingDisconnect) {
             Button("Cancel", role: .cancel) {}
@@ -135,6 +140,23 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.borderedProminent)
             }
+        }
+    }
+
+    private var menuBarSection: some View {
+        SettingsSection("Menu Bar") {
+            Picker("Show first task from", selection: $appState.menuBarTitleListId) {
+                Text("None").tag(String?.none)
+                ForEach(appState.taskLists) { list in
+                    Text(list.title).tag(String?.some(list.id))
+                }
+            }
+            .disabled(!appState.isSignedIn)
+
+            Text("Displays the title of the top active task from the chosen list next to the menu bar icon.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
