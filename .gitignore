@@ -64,3 +64,6 @@ Secrets/
 Config.xcconfig
 .wrangler/
 client_*.googleusercontent.com.plist
+
+# Generated files
+dist/

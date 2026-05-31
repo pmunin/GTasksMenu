@@ -72,6 +72,34 @@ Download the signed and notarized DMG from the [latest GitHub release](https://g
 
 5. Open `TaskMenu.xcodeproj` in Xcode and build the app.
 
+### Build a Local DMG for Personal Installs
+
+To run TaskMenu on another one of your own Macs without notarization or a paid
+Apple Developer account, build an ad-hoc-signed DMG:
+
+```bash
+./scripts/build-local-dmg.sh
+```
+
+This generates the project, builds the app, and packages `dist/TaskMenu-<version>.dmg`.
+The script requires a full Xcode install; if `xcode-select` points at the Command Line
+Tools, it defaults `DEVELOPER_DIR` to `/Applications/Xcode.app/Contents/Developer`.
+
+Install it on the other Mac:
+
+1. Copy the DMG over, open it, and drag **TaskMenu** to **Applications**.
+2. Clear the Gatekeeper quarantine flag (one-time, because the build is not notarized):
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/TaskMenu.app
+   ```
+
+3. Launch TaskMenu.
+
+Without step 2, macOS reports the app as "damaged" — that is Gatekeeper blocking an
+un-notarized app, not a real problem. Your `GOOGLE_CLIENT_ID` from `Config.xcconfig` is
+compiled into the build, so Google sign-in works on the other Mac.
+
 ## Development
 
 - Swift 6
